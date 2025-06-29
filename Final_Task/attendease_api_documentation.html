@@ -1,0 +1,2365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AttendEase API Documentation - FET</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 4px solid #007bff;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            margin: -40px -40px 50px -40px;
+            padding: 40px;
+            border-radius: 15px 15px 0 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header .subtitle {
+            font-size: 1.4em;
+            margin: 15px 0 10px 0;
+            opacity: 0.9;
+        }
+        .header .version-info {
+            font-size: 1.1em;
+            margin: 10px 0;
+            opacity: 0.8;
+        }
+        .base-url-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 2px solid #2196f3;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .base-url-section h3 {
+            margin: 0 0 15px 0;
+            color: #1565c0;
+            font-size: 1.5em;
+        }
+        .base-url-section .url {
+            background: #1976d2;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .endpoint-group {
+            margin-bottom: 50px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .endpoint-group-header {
+            background: linear-gradient(135deg, #333, #555);
+            color: white;
+            padding: 20px 25px;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+        .endpoint-group-header .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .endpoint {
+            border-bottom: 1px solid #f0f0f0;
+            background: #fafafa;
+        }
+        .endpoint:last-child {
+            border-bottom: none;
+        }
+        .endpoint-header {
+            padding: 18px 25px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .endpoint-header:hover {
+            background: #f8f9fa;
+        }
+        .endpoint-title {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #333;
+        }
+        .endpoint-method {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .endpoint-method.GET { background: linear-gradient(135deg, #28a745, #20c997); }
+        .endpoint-method.POST { background: linear-gradient(135deg, #007bff, #0056b3); }
+        .endpoint-method.PUT { background: linear-gradient(135deg, #ffc107, #e0a800); color: #333; }
+        .endpoint-method.DELETE { background: linear-gradient(135deg, #dc3545, #c82333); }
+        .endpoint-body {
+            padding: 25px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+        .endpoint-url {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-size: 1.05em;
+            color: #495057;
+        }
+        .endpoint-description {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+            line-height: 1.6;
+        }
+        .parameters {
+            margin-top: 20px;
+        }
+        .parameters h4 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.2em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+        .parameter {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .parameter-name {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 1.05em;
+        }
+        .parameter-type {
+            color: #6c757d;
+            font-size: 0.95em;
+            font-style: italic;
+        }
+        .parameter-description {
+            margin-top: 5px;
+            color: #555;
+        }
+        .response-example {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .response-example h5 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .response-example pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+        .auth-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin: 15px 0;
+            color: #856404;
+        }
+        .auth-note strong {
+            color: #533f03;
+        }
+        .toc {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+        .toc h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            columns: 2;
+            column-gap: 30px;
+        }
+        .toc li {
+            margin-bottom: 8px;
+            break-inside: avoid;
+        }
+        .toc a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 3px solid #e9ecef;
+            text-align: center;
+            color: #666;
+            background: #f8f9fa;
+            margin-left: -40px;
+            margin-right: -40px;
+            margin-bottom: -40px;
+            padding: 30px 40px;
+            border-radius: 0 0 15px 15px;
+        }
+        .footer h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .security-note {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin: 15px 0;
+            color: #0c5460;
+        }
+        .security-note strong {
+            color: #062c33;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AttendEase API Documentation</h1>
+            <div class="subtitle">Faculty of Engineering and Technology</div>
+            <div class="subtitle">University of Buea, FET Attendance Management System</div>
+            <div class="version-info"><strong>Version:</strong> 1.0.0 | <strong>Environment:</strong> Production</div>
+        </div>
+
+        <div class="base-url-section">
+            <h3>🌐 Production Base URL</h3>
+            <div class="url">https://attendease-backend-x31p.onrender.com</div>
+            <p style="margin: 15px 0 0 0; color: #666;">All API endpoints are prefixed with this base URL + /api</p>
+            <p style="margin: 5px 0 0 0; color: #888; font-size: 0.9em;">Example: https://attendease-backend-x31p.onrender.com/api/health</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">60+</div>
+                <div class="stat-label">API Endpoints</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">13</div>
+                <div class="stat-label">Core Modules</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">User Roles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">JWT</div>
+                <div class="stat-label">Authentication</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2FA</div>
+                <div class="stat-label">Security</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">AI</div>
+                <div class="stat-label">Face Recognition</div>
+            </div>
+        </div>
+
+        <div class="toc">
+            <h3>📋 Table of Contents</h3>
+            <ul>
+                <li><a href="#health">System Health</a></li>
+                <li><a href="#auth">Authentication & Security</a></li>
+                <li><a href="#face-recognition">Face Recognition AI</a></li>
+                <li><a href="#users">User Management</a></li>
+                <li><a href="#students">Student Management</a></li>
+                <li><a href="#lecturers">Lecturer Management</a></li>
+                <li><a href="#admins">Admin Management</a></li>
+                <li><a href="#academic">Academic Structure</a></li>
+                <li><a href="#courses">Course Management</a></li>
+                <li><a href="#assignments">Course Assignments</a></li>
+                <li><a href="#enrollments">Student Enrollments</a></li>
+                <li><a href="#sessions">Attendance Sessions</a></li>
+                <li><a href="#records">Attendance Records</a></li>
+                <li><a href="#geofence">Geofencing System</a></li>
+                <li><a href="#notifications">Notifications</a></li>
+                <li><a href="#dashboard">Dashboard & Analytics</a></li>
+                <li><a href="#reports">Reports & Statistics</a></li>
+                <li><a href="#system">System Administration</a></li>
+                <li><a href="#ub-setup">UB FET Setup</a></li>
+                <li><a href="#uploads">File Uploads</a></li>
+            </ul>
+        </div>
+
+        <div id="health" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">🏥</span>System Health & Monitoring</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Health Check</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/health</div>
+                    <div class="endpoint-description">Check system health status, database connectivity, and service availability</div>
+                    <div class="response-example">
+                        <h5>Response Example:</h5>
+                        <pre>{
+  "status": "healthy",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "database": "connected",
+  "services": {
+    "authentication": "operational",
+    "geofencing": "operational",
+    "notifications": "operational",
+    "face_recognition": "operational"
+  },
+  "version": "1.0.0"
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">System Health Details</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/system/health</div>
+                    <div class="endpoint-description">Detailed system health information including performance metrics</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="auth" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">🔐</span>Authentication & Security</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">User Registration</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/register</div>
+                    <div class="endpoint-description">Register new user account with email verification and role-based validation</div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">email</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">User's email address. Must be UB domain for students/admins (@ub.edu.bz)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">password</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">Strong password (min 8 chars, uppercase, lowercase, number, special char)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">user_type</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">One of: student, lecturer, admin</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">first_name</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">User's first name</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">last_name</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">User's last name</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">matricle_number</span> <span class="parameter-type">(string, required for students)</span>
+                            <div class="parameter-description">Student matriculation number (format: YYYY-XXXX)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">phone_number</span> <span class="parameter-type">(string, required for lecturers)</span>
+                            <div class="parameter-description">Phone number for SMS verification</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">User Login</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/login</div>
+                    <div class="endpoint-description">Authenticate user credentials and return JWT access token with session management</div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">email</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">User's registered email address</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">password</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">User's password</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">remember_me</span> <span class="parameter-type">(boolean, optional)</span>
+                            <div class="parameter-description">Extend session duration if true</div>
+                        </div>
+                    </div>
+                    <div class="response-example">
+                        <h5>Success Response:</h5>
+                        <pre>{
+  "success": true,
+  "message": "Login successful",
+  "user": {
+    "id": 123,
+    "email": "student@ub.edu.bz",
+    "user_type": "student",
+    "first_name": "John",
+    "last_name": "Doe"
+  },
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "expires_in": 3600
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">User Logout</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/logout</div>
+                    <div class="endpoint-description">Logout current user session and invalidate tokens</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Logout All Sessions</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/logout-all</div>
+                    <div class="endpoint-description">Logout from all active sessions across all devices</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Send 2FA Code</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/send-2fa</div>
+                    <div class="endpoint-description">Send two-factor authentication code via email or SMS</div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">email</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">User's email address</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">method</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">Delivery method: "email" or "sms"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Verify 2FA Code</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/verify-2fa</div>
+                    <div class="endpoint-description">Verify two-factor authentication code and complete login process</div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">email</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">User's email address</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">code</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">6-digit verification code</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Validate Email</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/validate-email</div>
+                    <div class="endpoint-description">Validate email format and domain restrictions</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Refresh Token</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/refresh</div>
+                    <div class="endpoint-description">Refresh JWT access token using refresh token</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Change Password</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/change-password</div>
+                    <div class="endpoint-description">Change user password with current password verification</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Forgot Password</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/forgot-password</div>
+                    <div class="endpoint-description">Initiate password reset process via email</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Reset Password</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/reset-password</div>
+                    <div class="endpoint-description">Reset password using verification token</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="face-recognition" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">🤖</span>Face Recognition AI System</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Register Face Profile</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/face-recognition/register</div>
+                    <div class="endpoint-description">Register user's face profile for attendance verification using AI face recognition technology</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                    <div class="security-note">
+                        <strong>Security:</strong> Face data is encrypted and stored securely. Multiple face angles required for accuracy.
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body (multipart/form-data):</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">face_images</span> <span class="parameter-type">(array of files, required)</span>
+                            <div class="parameter-description">3-5 face images from different angles (JPG/PNG, max 5MB each, min 400x400px)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">user_id</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">User ID for face profile registration</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">quality_threshold</span> <span class="parameter-type">(float, optional)</span>
+                            <div class="parameter-description">Minimum face quality score (0.0-1.0, default: 0.7)</div>
+                        </div>
+                    </div>
+                    <div class="response-example">
+                        <h5>Success Response:</h5>
+                        <pre>{
+  "success": true,
+  "message": "Face profile registered successfully",
+  "face_profile_id": "fp_123456789",
+  "quality_scores": [0.92, 0.88, 0.91, 0.89],
+  "encoding_status": "completed",
+  "verification_ready": true
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Verify Face for Attendance</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/face-recognition/verify</div>
+                    <div class="endpoint-description">Verify user identity using face recognition during attendance check-in process</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                    <div class="security-note">
+                        <strong>Security:</strong> Real-time liveness detection prevents spoofing attacks. Confidence threshold: 85%
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body (multipart/form-data):</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">face_image</span> <span class="parameter-type">(file, required)</span>
+                            <div class="parameter-description">Live face image for verification (JPG/PNG, max 5MB)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">session_id</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Active attendance session ID</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">liveness_check</span> <span class="parameter-type">(boolean, optional)</span>
+                            <div class="parameter-description">Enable liveness detection (default: true)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">confidence_threshold</span> <span class="parameter-type">(float, optional)</span>
+                            <div class="parameter-description">Minimum confidence score (0.0-1.0, default: 0.85)</div>
+                        </div>
+                    </div>
+                    <div class="response-example">
+                        <h5>Success Response:</h5>
+                        <pre>{
+  "success": true,
+  "verified": true,
+  "confidence_score": 0.94,
+  "user_id": 123,
+  "verification_id": "ver_987654321",
+  "liveness_passed": true,
+  "processing_time_ms": 1250,
+  "message": "Face verification successful"
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update Face Profile</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/face-recognition/profile/update</div>
+                    <div class="endpoint-description">Update existing face profile with new images to improve recognition accuracy</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required (own profile), Admin access for any profile
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body (multipart/form-data):</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">additional_images</span> <span class="parameter-type">(array of files, required)</span>
+                            <div class="parameter-description">1-3 additional face images to improve accuracy</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">replace_existing</span> <span class="parameter-type">(boolean, optional)</span>
+                            <div class="parameter-description">Replace all existing images (default: false)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Face Profile Status</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/face-recognition/profile/status</div>
+                    <div class="endpoint-description">Check face profile registration status and verification readiness</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                    <div class="response-example">
+                        <h5>Response Example:</h5>
+                        <pre>{
+  "profile_exists": true,
+  "registration_date": "2024-01-15T10:30:00Z",
+  "images_count": 4,
+  "encoding_status": "completed",
+  "verification_ready": true,
+  "last_verification": "2024-01-20T14:22:00Z",
+  "success_rate": 0.96,
+  "total_verifications": 25
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Delete Face Profile</span>
+                    <span class="endpoint-method DELETE">DELETE</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/face-recognition/profile/delete</div>
+                    <div class="endpoint-description">Permanently delete user's face profile and all associated biometric data</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required (own profile), Admin access for any profile
+                    </div>
+                    <div class="security-note">
+                        <strong>Security:</strong> This action is irreversible. All face encodings and images will be permanently deleted.
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Face Recognition Analytics</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/face-recognition/analytics</div>
+                    <div class="endpoint-description">Get face recognition system analytics and performance metrics</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">date_from</span> <span class="parameter-type">(date, optional)</span>
+                            <div class="parameter-description">Analytics start date</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">date_to</span> <span class="parameter-type">(date, optional)</span>
+                            <div class="parameter-description">Analytics end date</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">user_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by specific user</div>
+                        </div>
+                    </div>
+                    <div class="response-example">
+                        <h5>Response Example:</h5>
+                        <pre>{
+  "total_verifications": 1250,
+  "successful_verifications": 1198,
+  "success_rate": 0.958,
+  "average_confidence": 0.91,
+  "average_processing_time_ms": 1180,
+  "liveness_detection_rate": 0.995,
+  "registered_profiles": 342,
+  "daily_stats": [
+    {
+      "date": "2024-01-20",
+      "verifications": 45,
+      "success_rate": 0.96
+    }
+  ]
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Face Recognition Settings</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/face-recognition/settings</div>
+                    <div class="endpoint-description">Get current face recognition system configuration and thresholds</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update Face Recognition Settings</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/face-recognition/settings</div>
+                    <div class="endpoint-description">Update face recognition system configuration and security thresholds</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Super Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">confidence_threshold</span> <span class="parameter-type">(float, optional)</span>
+                            <div class="parameter-description">Global confidence threshold (0.0-1.0)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">liveness_detection</span> <span class="parameter-type">(boolean, optional)</span>
+                            <div class="parameter-description">Enable/disable liveness detection</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">max_verification_attempts</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Maximum verification attempts per session</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">image_quality_threshold</span> <span class="parameter-type">(float, optional)</span>
+                            <div class="parameter-description">Minimum image quality score</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="users" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">👥</span>User Management</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get All Users</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/users</div>
+                    <div class="endpoint-description">Retrieve paginated list of all users with filtering and search capabilities</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">page</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Page number for pagination (default: 1)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">limit</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Number of users per page (default: 20, max: 100)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">role</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Filter by user role: student, lecturer, admin</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">search</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Search by name or email</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get User Profile</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/users/profile</div>
+                    <div class="endpoint-description">Get current authenticated user's profile information</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update User Profile</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/users/profile</div>
+                    <div class="endpoint-description">Update current user's profile information</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="students" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">👨‍🎓</span>Student Management</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get All Students</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/students</div>
+                    <div class="endpoint-description">Retrieve comprehensive list of students with enrollment details and academic information</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">department_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by department</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">year_level</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by academic year level</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">status</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Filter by enrollment status: active, inactive, graduated</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Student by ID</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/students/{student_id}</div>
+                    <div class="endpoint-description">Get detailed information for specific student including course enrollments and attendance history</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Student (own profile), Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update Student</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/students/{student_id}</div>
+                    <div class="endpoint-description">Update student profile information and academic details</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Student (own profile), Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Student Courses</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/students/{student_id}/courses</div>
+                    <div class="endpoint-description">Get all courses enrolled by specific student with current semester focus</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Student Statistics</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/students/statistics</div>
+                    <div class="endpoint-description">Get comprehensive student enrollment and demographic statistics</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="lecturers" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">👨‍🏫</span>Lecturer Management</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get All Lecturers</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/lecturers</div>
+                    <div class="endpoint-description">Retrieve list of lecturers with department affiliations and specializations</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Lecturer by ID</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/lecturers/{lecturer_id}</div>
+                    <div class="endpoint-description">Get detailed lecturer information including course assignments and teaching schedule</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer (own profile), Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update Lecturer</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/lecturers/{lecturer_id}</div>
+                    <div class="endpoint-description">Update lecturer profile, specialization, and contact information</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer (own profile), Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="admins" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">👨‍💼</span>Admin Management</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get All Admins</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/admins</div>
+                    <div class="endpoint-description">Retrieve list of system administrators with role permissions</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Super Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Admin by ID</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/admins/{admin_id}</div>
+                    <div class="endpoint-description">Get detailed administrator information and permissions</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin (own profile), Super Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update Admin</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/admins/{admin_id}</div>
+                    <div class="endpoint-description">Update administrator profile and permission levels</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Super Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="academic" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">🏛️</span>Academic Structure</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Departments</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/departments</div>
+                    <div class="endpoint-description">Retrieve all university departments and faculties with hierarchical structure</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Semesters</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/semesters</div>
+                    <div class="endpoint-description">Get academic semesters with start/end dates and current semester identification</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Academic Years</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/academic-years</div>
+                    <div class="endpoint-description">Retrieve academic years with semester breakdowns and enrollment periods</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="courses" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">📚</span>Course Management</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get All Courses</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/courses</div>
+                    <div class="endpoint-description">Retrieve courses with filtering by department, level, semester, and prerequisites</div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">department_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by department</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">level</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by course level (100, 200, 300, 400)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">semester_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by semester</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">active_only</span> <span class="parameter-type">(boolean, optional)</span>
+                            <div class="parameter-description">Show only active courses (default: true)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Create Course</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/courses</div>
+                    <div class="endpoint-description">Create new course with validation for course codes, prerequisites, and credit hours</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">course_code</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">Unique course code (e.g., "CS101", "MATH201")</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">course_name</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">Full course name</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">credit_hours</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Number of credit hours (1-6)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">department_id</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Department offering the course</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">description</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Course description and objectives</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Course by ID</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/courses/{course_id}</div>
+                    <div class="endpoint-description">Get detailed course information including prerequisites, assignments, and enrollment data</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update Course</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/courses/{course_id}</div>
+                    <div class="endpoint-description">Update course information, status, and requirements</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Delete Course</span>
+                    <span class="endpoint-method DELETE">DELETE</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/courses/{course_id}</div>
+                    <div class="endpoint-description">Soft delete course (marks as inactive rather than permanent deletion)</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Course Students</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/courses/{course_id}/students</div>
+                    <div class="endpoint-description">Get all students enrolled in specific course with enrollment details</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer (assigned courses), Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="assignments" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">📋</span>Course Assignments</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Course Assignments</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/course-assignments</div>
+                    <div class="endpoint-description">Retrieve lecturer-course assignments with schedule and classroom information</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Create Course Assignment</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/course-assignments</div>
+                    <div class="endpoint-description">Assign lecturer to course with schedule and classroom details</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update Course Assignment</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/course-assignments/{assignment_id}</div>
+                    <div class="endpoint-description">Update course assignment details including schedule changes</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Delete Course Assignment</span>
+                    <span class="endpoint-method DELETE">DELETE</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/course-assignments/{assignment_id}</div>
+                    <div class="endpoint-description">Remove lecturer from course assignment</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="enrollments" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">📝</span>Student Enrollments</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Student Enrollments</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/student-enrollments</div>
+                    <div class="endpoint-description">Retrieve student course enrollments with status and grade information</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Student (own enrollments), Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Create Student Enrollment</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/student-enrollments</div>
+                    <div class="endpoint-description">Enroll student in course with prerequisite validation</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update Student Enrollment</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/student-enrollments/{enrollment_id}</div>
+                    <div class="endpoint-description">Update enrollment status, grades, or drop course</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer (assigned courses), Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Delete Student Enrollment</span>
+                    <span class="endpoint-method DELETE">DELETE</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/student-enrollments/{enrollment_id}</div>
+                    <div class="endpoint-description">Remove student from course enrollment</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sessions" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">📍</span>Attendance Sessions</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get All Sessions</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-sessions</div>
+                    <div class="endpoint-description">Retrieve attendance sessions with status filtering and pagination</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer (own sessions), Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">status</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Filter by status: active, ended, scheduled</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">course_assignment_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by specific course assignment</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">date_from</span> <span class="parameter-type">(date, optional)</span>
+                            <div class="parameter-description">Filter sessions from specific date</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">date_to</span> <span class="parameter-type">(date, optional)</span>
+                            <div class="parameter-description">Filter sessions to specific date</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Create Session</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-sessions</div>
+                    <div class="endpoint-description">Start new attendance session with geofencing, time limits, and face recognition settings</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">course_assignment_id</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Course assignment for the session</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">session_name</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">Name/title for the session</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">duration_minutes</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Session duration in minutes (5-180)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">geofence_area_id</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Geofence area for location verification</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">require_face_recognition</span> <span class="parameter-type">(boolean, optional)</span>
+                            <div class="parameter-description">Enable face recognition verification (default: true)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Session by ID</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-sessions/{session_id}</div>
+                    <div class="endpoint-description">Get detailed session information including attendance records and statistics</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Start Session</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-sessions/start</div>
+                    <div class="endpoint-description">Alternative endpoint to start attendance session with simplified parameters</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">End Session</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-sessions/end</div>
+                    <div class="endpoint-description">End active attendance session and finalize all attendance records</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer (session owner), Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">End Specific Session</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-sessions/{session_id}/end</div>
+                    <div class="endpoint-description">End specific attendance session by ID</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer (session owner), Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="records" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">✅</span>Attendance Records</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Student Check-in</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-records</div>
+                    <div class="endpoint-description">Record student attendance with face recognition, geolocation verification, and timestamp</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Student access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">session_id</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Active attendance session ID</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">latitude</span> <span class="parameter-type">(float, required)</span>
+                            <div class="parameter-description">Student's current latitude</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">longitude</span> <span class="parameter-type">(float, required)</span>
+                            <div class="parameter-description">Student's current longitude</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">face_image</span> <span class="parameter-type">(file, optional)</span>
+                            <div class="parameter-description">Base64 encoded face image for recognition</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">device_info</span> <span class="parameter-type">(object, optional)</span>
+                            <div class="parameter-description">Device information for security tracking</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Check-in Alternative</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-records/check-in</div>
+                    <div class="endpoint-description">Alternative check-in endpoint with simplified parameters</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Student access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Attendance Records</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-records</div>
+                    <div class="endpoint-description">Retrieve attendance records with comprehensive filtering and pagination</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Student (own records), Lecturer/Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">student_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by specific student</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">session_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by specific session</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">course_assignment_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by course assignment</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">status</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Filter by status: present, late, absent</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">date_from</span> <span class="parameter-type">(date, optional)</span>
+                            <div class="parameter-description">Filter records from specific date</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">date_to</span> <span class="parameter-type">(date, optional)</span>
+                            <div class="parameter-description">Filter records to specific date</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Manual Override</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-records/manual-override</div>
+                    <div class="endpoint-description">Manually record or modify attendance with justification (lecturer/admin only)</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer (assigned courses), Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Attendance History</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-records/history</div>
+                    <div class="endpoint-description">Get comprehensive attendance history with analytics and trends</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Student (own history), Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Student History by ID</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/attendance-records/student/{student_id}/history</div>
+                    <div class="endpoint-description">Get comprehensive attendance history for specific student with detailed analytics</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Student (own history), Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="geofence" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">🗺️</span>Geofencing System</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Geofence Areas</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/geofence-areas</div>
+                    <div class="endpoint-description">Retrieve all defined geofence areas for attendance verification with coordinates and boundaries</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">active_only</span> <span class="parameter-type">(boolean, optional)</span>
+                            <div class="parameter-description">Show only active geofence areas (default: true)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">area_type</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Filter by area type: classroom, building, campus</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Create Geofence Area</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/geofence-areas</div>
+                    <div class="endpoint-description">Define new geofence area with circular or rectangular boundaries for location-based attendance</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">name</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">Name of the geofence area (e.g., "Engineering Building Room 101")</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">area_type</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">Type: classroom, building, campus, outdoor</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">center_latitude</span> <span class="parameter-type">(float, required)</span>
+                            <div class="parameter-description">Center point latitude</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">center_longitude</span> <span class="parameter-type">(float, required)</span>
+                            <div class="parameter-description">Center point longitude</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">radius_meters</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Radius in meters (10-500)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">description</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Additional description and landmarks</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update Geofence Area</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/geofence-areas/{area_id}</div>
+                    <div class="endpoint-description">Update geofence area boundaries, name, or status</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Delete Geofence Area</span>
+                    <span class="endpoint-method DELETE">DELETE</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/geofence-areas/{area_id}</div>
+                    <div class="endpoint-description">Remove geofence area (soft delete to preserve historical data)</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Validate Location</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/geofence-areas/validate</div>
+                    <div class="endpoint-description">Check if given coordinates are within specified geofence area boundaries</div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">latitude</span> <span class="parameter-type">(float, required)</span>
+                            <div class="parameter-description">Location latitude to validate</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">longitude</span> <span class="parameter-type">(float, required)</span>
+                            <div class="parameter-description">Location longitude to validate</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">geofence_area_id</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Geofence area ID to check against</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="notifications" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">🔔</span>Notifications System</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get User Notifications</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/notifications</div>
+                    <div class="endpoint-description">Retrieve notifications for current user with filtering and pagination options</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">unread_only</span> <span class="parameter-type">(boolean, optional)</span>
+                            <div class="parameter-description">Show only unread notifications</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">type</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Filter by type: attendance, course, system, announcement</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">priority</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Filter by priority: low, medium, high, urgent</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">limit</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Number of notifications to return (default: 20, max: 100)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Create Notification</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/notifications</div>
+                    <div class="endpoint-description">Create new notification for specific user or user group</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Mark Notification as Read</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/notifications/{notification_id}/read</div>
+                    <div class="endpoint-description">Mark specific notification as read and update timestamp</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required (own notifications only)
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Mark All as Read</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/notifications/mark-all-read</div>
+                    <div class="endpoint-description">Mark all user notifications as read in bulk operation</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Delete Notification</span>
+                    <span class="endpoint-method DELETE">DELETE</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/notifications/{notification_id}</div>
+                    <div class="endpoint-description">Delete specific notification from user's inbox</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required (own notifications only)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dashboard" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">📊</span>Dashboard & Analytics</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Dashboard Data</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/dashboard</div>
+                    <div class="endpoint-description">Get role-specific dashboard data with key metrics, recent activities, and quick stats</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                    <div class="response-example">
+                        <h5>Student Dashboard Response:</h5>
+                        <pre>{
+  "user_info": {
+    "name": "John Doe",
+    "matricle_number": "2024-0001",
+    "department": "Engineering"
+  },
+  "attendance_summary": {
+    "total_sessions": 45,
+    "attended": 42,
+    "attendance_rate": 93.3
+  },
+  "upcoming_sessions": [...],
+  "recent_notifications": [...],
+  "course_progress": [...]
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get System Statistics</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/dashboard/statistics</div>
+                    <div class="endpoint-description">Get comprehensive system statistics for administrative dashboard</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Activity Feed</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/dashboard/activity</div>
+                    <div class="endpoint-description">Get recent system activities and user actions for monitoring</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="reports" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">📈</span>Reports & Statistics</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Generate Reports</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/reports</div>
+                    <div class="endpoint-description">Generate various types of reports with customizable parameters and export options</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Attendance Reports</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/reports/attendance</div>
+                    <div class="endpoint-description">Generate comprehensive attendance reports with filtering and analytics</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">course_assignment_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by specific course assignment</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">student_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by specific student</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">date_from</span> <span class="parameter-type">(date, required)</span>
+                            <div class="parameter-description">Report start date</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">date_to</span> <span class="parameter-type">(date, required)</span>
+                            <div class="parameter-description">Report end date</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">format</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Export format: json, csv, pdf (default: json)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Student Performance Reports</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/reports/students</div>
+                    <div class="endpoint-description">Generate detailed student performance and attendance analytics</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Lecturer Reports</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/reports/lecturers</div>
+                    <div class="endpoint-description">Generate lecturer performance and course management reports</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Course Reports</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/reports/courses</div>
+                    <div class="endpoint-description">Generate course-specific attendance and enrollment reports</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="system" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">⚙️</span>System Administration</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get System Settings</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/system-settings</div>
+                    <div class="endpoint-description">Retrieve system configuration settings and feature flags</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Update System Settings</span>
+                    <span class="endpoint-method PUT">PUT</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/system-settings</div>
+                    <div class="endpoint-description">Update system configuration and feature toggles</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Super Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Get Audit Logs</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/audit-logs</div>
+                    <div class="endpoint-description">Retrieve system audit logs for security and compliance monitoring</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">user_id</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by specific user</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">action_type</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Filter by action type: login, logout, create, update, delete</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">date_from</span> <span class="parameter-type">(date, optional)</span>
+                            <div class="parameter-description">Filter logs from specific date</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">date_to</span> <span class="parameter-type">(date, optional)</span>
+                            <div class="parameter-description">Filter logs to specific date</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Session Management</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/sessions</div>
+                    <div class="endpoint-description">Get all active user sessions for monitoring and management</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required (own sessions), Admin (all sessions)
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Revoke Session</span>
+                    <span class="endpoint-method DELETE">DELETE</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/sessions/{session_id}</div>
+                    <div class="endpoint-description">Revoke specific user session for security purposes</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required (own sessions), Admin (any session)
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Cleanup Sessions</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/auth/sessions/cleanup</div>
+                    <div class="endpoint-description">Clean up expired and inactive sessions system-wide</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="ub-setup" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">🏫</span>UB FET Specific Setup</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">UB System Setup</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/ub-setup</div>
+                    <div class="endpoint-description">Get University of Belize specific system configuration and setup information</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Admin access required
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Validate Matricle Number</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/ub-setup/matricle/validate</div>
+                    <div class="endpoint-description">Validate UB student matriculation number format and uniqueness</div>
+                    <div class="parameters">
+                        <h4>Request Body:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">matricle_number</span> <span class="parameter-type">(string, required)</span>
+                            <div class="parameter-description">Student matriculation number in format YYYY-XXXX</div>
+                        </div>
+                    </div>
+                    <div class="response-example">
+                        <h5>Response Example:</h5>
+                        <pre>{
+  "valid": true,
+  "format_correct": true,
+  "unique": true,
+  "year": 2024,
+  "sequence": "0001"
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">UB Departments</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/ub-setup/departments</div>
+                    <div class="endpoint-description">Get University of Belize departments with FET-specific structure</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">UB FET Courses</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/ub-setup/courses</div>
+                    <div class="endpoint-description">Get Faculty of Engineering and Technology specific courses and programs</div>
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">program</span> <span class="parameter-type">(string, optional)</span>
+                            <div class="parameter-description">Filter by program: computer_science, engineering, technology</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">level</span> <span class="parameter-type">(integer, optional)</span>
+                            <div class="parameter-description">Filter by course level (100-400)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="uploads" class="endpoint-group">
+            <div class="endpoint-group-header">
+                <span><span class="icon">📁</span>File Upload System</span>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Upload Profile Image</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/users/profile/image</div>
+                    <div class="endpoint-description">Upload user profile image with automatic resizing and face detection validation</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Bearer token required
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body (multipart/form-data):</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">image</span> <span class="parameter-type">(file, required)</span>
+                            <div class="parameter-description">Image file (JPG, PNG, max 5MB, min 200x200px)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Upload Student List</span>
+                    <span class="endpoint-method POST">POST</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/courses/upload-students</div>
+                    <div class="endpoint-description">Bulk upload student enrollment list via CSV file with validation and error reporting</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                    <div class="parameters">
+                        <h4>Request Body (multipart/form-data):</h4>
+                        <div class="parameter">
+                            <span class="parameter-name">file</span> <span class="parameter-type">(file, required)</span>
+                            <div class="parameter-description">CSV file with student data (max 10MB)</div>
+                        </div>
+                        <div class="parameter">
+                            <span class="parameter-name">course_assignment_id</span> <span class="parameter-type">(integer, required)</span>
+                            <div class="parameter-description">Course assignment to enroll students in</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="endpoint-title">Download Template</span>
+                    <span class="endpoint-method GET">GET</span>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-url">/api/templates/student-upload</div>
+                    <div class="endpoint-description">Download CSV template for student bulk upload with proper headers and format</div>
+                    <div class="auth-note">
+                        <strong>Authentication:</strong> Lecturer/Admin access required
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h4>AttendEase API Documentation</h4>
+            <p><strong>Faculty of Engineering and Technology - University of Buea</strong></p>
+            <p>Version 1.0.0 | Built with Flask, PostgreSQL, JWT Authentication, Face Recognition AI, and Geofencing Technology</p>
+            <p><strong>Production Environment:</strong> https://attendease-backend-x31p.onrender.com</p>
+            <p style="margin-top: 20px; font-size: 0.9em; color: #888;">
+                This documentation covers all 60+ API endpoints for the AttendEase attendance management system.<br>
+                Features advanced AI-powered face recognition, real-time geofencing, and comprehensive analytics.<br>
+                For technical support or API access, contact the FET IT Department.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
